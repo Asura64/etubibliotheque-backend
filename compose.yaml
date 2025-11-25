@@ -10,5 +10,13 @@ services:
       - '3306'
     volumes:
       - db_data:/var/lib/mysql
+  phpmyadmin:
+    image: 'phpmyadmin:latest'
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+    ports:
+      - '8585:80'
 volumes:
   db_data:
