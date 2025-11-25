@@ -29,3 +29,10 @@ management:
     web:
       exposure:
         include: '*'
+
+security:
+  jwt:
+    # generated with https://www.devglan.com/online-tools/hmac-sha256-online
+    secret-key: 4fadddd74a7a63c9a412d0fa7a9259204e9d404c37ac5a94319f8659e19c330b
+    # 1h in millisecond
+    expiration-time: 3600000
