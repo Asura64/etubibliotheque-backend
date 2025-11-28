@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping
 @RequiredArgsConstructor
@@ -30,8 +32,9 @@ public class UserController {
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@Valid  @RequestBody LoginRequestDTO loginRequestDTO) {
         String jwtToken = userService.login(loginRequestDTO.getLogin(), loginRequestDTO.getPassword());
-        return ResponseEntity.ok(jwtToken);
+        HashMap<String,String> jsonBody = new HashMap<>();
+        jsonBody.put("token", jwtToken);
+        return ResponseEntity.ok(jsonBody);
     }
-
 
 }
