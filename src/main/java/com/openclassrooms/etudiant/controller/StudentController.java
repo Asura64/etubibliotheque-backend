@@ -1,26 +1,27 @@
 package com.openclassrooms.etudiant.controller;
 
-import com.openclassrooms.etudiant.dto.student.AddDTO;
-import com.openclassrooms.etudiant.mapper.StudentDtoMapper;
+import com.openclassrooms.etudiant.entities.Student;
 import com.openclassrooms.etudiant.service.StudentService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping
-@RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentService studentService;
-    private final StudentDtoMapper studentDtoMapper;
+    @Autowired
+    StudentService studentService;
 
     @PostMapping("/api/student")
-    public ResponseEntity<?> add(@Valid @RequestBody AddDTO addDTO) {
-        studentService.add(studentDtoMapper.toEntity(addDTO));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<?> saveStudentData(@Valid @RequestBody Student student) {
+        try {
+            studentService.saveStudentData(student);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
