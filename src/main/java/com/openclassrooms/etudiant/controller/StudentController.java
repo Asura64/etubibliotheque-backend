@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class StudentController {
@@ -21,6 +22,18 @@ public class StudentController {
         try {
             studentService.saveStudentData(student);
             return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/api/student")
+    public ResponseEntity<?> getStudentData(@RequestParam(value = "id") Long id) {
+        try {
+            Optional<Student> student =  studentService.getStudentData(id);
+            return student.isPresent()
+                    ? new ResponseEntity<>(student, HttpStatus.OK)
+                    : new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
