@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +21,7 @@ public class StudentController {
     @PostMapping("/api/student")
     public ResponseEntity<?> saveStudentData(@Valid @RequestBody Student student) {
         try {
-            studentService.saveStudentData(student);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(studentService.saveStudentData(student), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -51,8 +51,9 @@ public class StudentController {
     @PutMapping("api/student")
     public ResponseEntity<?> updateStudentData(@Valid @RequestBody Student student) {
         try {
-            studentService.updateStudentData(student);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(studentService.updateStudentData(student), HttpStatus.OK);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
